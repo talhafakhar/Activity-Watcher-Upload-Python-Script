@@ -113,7 +113,7 @@ for bucket in buckets.values():
         'Content-Type': 'application/json',
         'AppId': 'MyApp',
         'X-TOTP-Code': totp_code,
-        'Host': hostname,
+        'Host-Name': hostname,
     }
 
     try:
@@ -124,10 +124,10 @@ for bucket in buckets.values():
 
     # If upload was successful, update timestamp
     if response.status_code == 200:
-        print('uploaded.....')
+        # print('uploaded.....')
         timestamps[bucket_id] = datetime.datetime.now().isoformat()
 
-    print(response)
+    # print(response)
 
 # Save timestamps
 with open(timestamp_file, 'w') as file:
