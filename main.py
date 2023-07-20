@@ -49,10 +49,31 @@ def generate_totp(secret):
     return '{:06d}'.format(code % 10 ** 6)  # Ensure 6-digit code by using modulo 10^6
 
 
-# Load the client secret from the JSON file
-with open('client_secret.json') as f:
-    data = json.load(f)
-    client_secret = data['secret']
+def get_script_directory():
+    script_file = os.path.abspath(__file__)
+    script_directory = os.path.dirname(script_file)
+    return script_directory
+
+
+def load_client_secret():
+    script_directory = get_script_directory()
+    client_secret_file = os.path.join(script_directory, 'client_secret.json')
+
+    with open(client_secret_file) as f:
+        data_1 = json.load(f)
+        client_secret_1 = data_1['secret']
+        return client_secret_1
+
+
+def save_timestamps(timestamps_1):
+    script_directory = get_script_directory()
+    timestamp_file_1 = os.path.join(script_directory, 'timestamps.json')
+
+    with open(timestamp_file_1, 'w') as file_temp:
+        json.dump(timestamps_1, file_temp)
+
+
+client_secret = load_client_secret()
 
 # Generate the TOTP code
 totp_code = generate_totp(hex_to_base32(client_secret))
@@ -61,7 +82,7 @@ api_base_url = 'http://localhost:5600/api'  # replace with your actual base API 
 upload_url = 'https://activity-watcher.2btechprojects.com/api/upload'  # replace with your actual upload API URL
 timestamp_file = 'timestamps.json'
 default_date = datetime.datetime.now().replace(hour=0, minute=0, second=0,
-                                               microsecond=0).isoformat() + '+05:00' # start with current day for first run
+                                               microsecond=0).isoformat() + '+05:00'  # start with current day for first run
 
 # Initialize or load timestamps
 if os.path.exists(timestamp_file):
@@ -131,5 +152,4 @@ for bucket in buckets.values():
     print(response)
 
 # Save timestamps
-with open(timestamp_file, 'w') as file:
-    json.dump(timestamps, file)
+save_timestamps(timestamps)
