@@ -61,7 +61,7 @@ api_base_url = 'http://localhost:5600/api'  # replace with your actual base API 
 upload_url = 'https://activity-watcher.2btechprojects.com/api/upload'  # replace with your actual upload API URL
 timestamp_file = 'timestamps.json'
 default_date = datetime.datetime.now().replace(hour=0, minute=0, second=0,
-                                               microsecond=0).isoformat()  # start with current day for first run
+                                               microsecond=0).isoformat() + '+05:00' # start with current day for first run
 
 # Initialize or load timestamps
 if os.path.exists(timestamp_file):
@@ -125,9 +125,10 @@ for bucket in buckets.values():
     # If upload was successful, update timestamp
     if response.status_code == 200:
         # print('uploaded.....')
-        timestamps[bucket_id] = datetime.datetime.now().isoformat()
+        # Append timezone +05:00 to the current datetime before adding to timestamps array
+        timestamps[bucket_id] = datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=5))).isoformat()
 
-    # print(response)
+    print(response)
 
 # Save timestamps
 with open(timestamp_file, 'w') as file:
