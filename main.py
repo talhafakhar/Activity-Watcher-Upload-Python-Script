@@ -79,7 +79,7 @@ client_secret = load_client_secret()
 totp_code = generate_totp(hex_to_base32(client_secret))
 
 api_base_url = 'http://localhost:5600/api'  # replace with your actual base API URL
-upload_url = 'https://activity-watcher.2btechprojects.com/api/upload'  # replace with your actual upload API URL
+upload_url = 'https://activity.wewantsaas.com/api/upload'  # replace with your actual upload API URL
 timestamp_file = 'timestamps.json'
 default_date = datetime.datetime.now().replace(hour=0, minute=0, second=0,
                                                microsecond=0).isoformat() + '+05:00'  # start with current day for first run
